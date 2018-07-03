@@ -1,0 +1,30 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:local="clr-namespace:TouchTest"
+             xmlns:shared="clr-namespace:Plugin.FormsGesture.Shared;assembly=Plugin.FormsGesture"
+             x:Class="TouchTest.MainPage">
+
+    <StackLayout>
+        <!-- Place new controls here -->
+        <Label Text="{Binding TapCount}" 
+           HorizontalOptions="Center"
+           VerticalOptions="CenterAndExpand" 
+            shared:Gesture.TapCommand="{Binding TapCommand1}"/>
+
+        <BoxView WidthRequest="300" HeightRequest="300" IsEnabled="True" InputTransparent="False" BackgroundColor="Black" shared:Gesture.PanCommand="{Binding PanCommand1}"></BoxView>
+        <StackLayout Orientation="Horizontal">
+            <Label Text="Current Position:"></Label>
+            <Label Text="{Binding CurrentPosition}"></Label>
+        </StackLayout>
+        <StackLayout Orientation="Horizontal">
+            <Label Text="Start Position:"></Label>
+            <Label Text="{Binding StartPosition}"></Label>
+        </StackLayout>
+        <StackLayout Orientation="Horizontal">
+            <Label Text="Status:"></Label>
+            <Label Text="{Binding Status}"></Label>
+        </StackLayout>
+    </StackLayout>
+
+</ContentPage>

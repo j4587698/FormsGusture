@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <!--Work around so the conditions work below-->
@@ -28,20 +28,20 @@
     <LangVersion>7.1</LangVersion>
     
     <!--TODO: Fill these in-->
-    <PackageLicenseUrl>LINK TO LICENSE</PackageLicenseUrl>
-    <PackageProjectUrl>LINK TO PROJECT</PackageProjectUrl>
-    <RepositoryUrl>LINK TO PROJECT</RepositoryUrl>
+    <PackageLicenseUrl>https://github.com/j4587698/FormsGusture</PackageLicenseUrl>
+    <PackageProjectUrl>https://github.com/j4587698/FormsGusture</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/j4587698/FormsGusture</RepositoryUrl>
     <PackageReleaseNotes>RELEASE NOTES</PackageReleaseNotes>
     <PackageIconUrl>ICON URL</PackageIconUrl>
     <PackageTags>xamarin, windows, ios, android, xamarin.forms, plugin, FormsGesture</PackageTags>
     
-    <Title>FormsGesture Plugin for Xamarin and Windows</Title>
-    <Summary>Summary of nuget</Summary>
-    <Description>Plugin Description</Description>
+    <Title>FormsGesture Plugin for Xamarin</Title>
+    <Summary>a tap pan gesture for xamarin.form</Summary>
+    <Description>a tap pan gesture for xamarin.forms.support ios android and uap</Description>
     
     
-    <Owners>YOU</Owners>
-    <Authors>YOU</Authors>
+    <Owners>jx</Owners>
+    <Authors>jx</Authors>
     <Copyright>Copyright 2018</Copyright>
   </PropertyGroup>
 
@@ -55,10 +55,14 @@
     <DebugType>pdbonly</DebugType>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|netstandard1.0|AnyCPU'">
+    <DocumentationFile>bin\Debug\netstandard1.0\Plugin.FormsGesture.xml</DocumentationFile>
+  </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="MSBuild.Sdk.Extras" Version="1.4.0" PrivateAssets="All" />
-    <Compile Include="**\*.shared.cs" />
+    <PackageReference Include="Xamarin.Forms" Version="3.1.0.583944" />
+    <Compile Include="Shared\**\*.cs" />
   </ItemGroup>
 
   <ItemGroup Condition=" $(TargetFramework.StartsWith('netstandard')) ">
@@ -66,7 +70,7 @@
 
   <ItemGroup Condition=" $(TargetFramework.StartsWith('uap10.0')) ">
     <PackageReference Include="Microsoft.NETCore.UniversalWindowsPlatform" Version="6.0.6" />
-    <Compile Include="**\*.uwp.cs" />
+    <Compile Include="UAP\**\*.cs" />
     <!--
     If you need to add sdk references:
      <SDKReference Include="WindowsMobile, Version=10.0.16299.0">
@@ -76,11 +80,11 @@
   </ItemGroup>
 
   <ItemGroup Condition=" $(TargetFramework.StartsWith('MonoAndroid')) ">
-    <Compile Include="**\*.android.cs" />
+    <Compile Include="Android\**\*.cs" />
   </ItemGroup>
 
   <ItemGroup Condition=" $(TargetFramework.StartsWith('Xamarin.iOS')) ">
-    <Compile Include="**\*.apple.cs" />
+    <Compile Include="IOS\**\*.cs" />
   </ItemGroup>
 
   <!--Additional item groups-->
