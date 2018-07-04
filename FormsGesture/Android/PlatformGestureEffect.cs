@@ -47,10 +47,10 @@ namespace Plugin.FormsGesture.Android
                     var command = panCommand;
                     if (command != null)
                     {
-                        eventArgs.StartPosition = new Point(e1.GetX(), e1.GetY());
-                        eventArgs.CurrentPosition = new Point(e2.GetX(), e2.GetY());
+                        eventArgs.StartPosition = PxToDp(new Point(e1.GetX(), e1.GetY()));
+                        eventArgs.CurrentPosition = PxToDp(new Point(e2.GetX(), e2.GetY()));
                         eventArgs.StatusType = GestureStatus.Running;
-                        eventArgs.TotalMove = new Point(distanceX, distanceY);
+                        eventArgs.TotalMove = PxToDp(new Point(e2.GetX() - e1.GetX(), e2.GetY() - e1.GetY()));
                         if (command.CanExecute(eventArgs))
                         {
                             command.Execute(eventArgs);

@@ -13,10 +13,10 @@
     <PackageId>Plugin.FormsGesture</PackageId>
     
     <Product>$(AssemblyName) ($(TargetFramework))</Product>
-    <AssemblyVersion>1.0.0.0</AssemblyVersion>
-    <AssemblyFileVersion>1.0.0.0</AssemblyFileVersion>
-    <Version>1.0.0.0</Version>
-    <PackageVersion>1.0.0.0</PackageVersion>
+    <AssemblyVersion>1.0.0.1</AssemblyVersion>
+    <AssemblyFileVersion>1.0.0.1</AssemblyFileVersion>
+    <Version>1.0.0.1</Version>
+    <PackageVersion>1.0.0.1</PackageVersion>
     <PackOnBuild>true</PackOnBuild>
     <NeutralLanguage>en</NeutralLanguage>
     <LangVersion>default</LangVersion>
@@ -31,8 +31,11 @@
     <PackageLicenseUrl>https://github.com/j4587698/FormsGusture</PackageLicenseUrl>
     <PackageProjectUrl>https://github.com/j4587698/FormsGusture</PackageProjectUrl>
     <RepositoryUrl>https://github.com/j4587698/FormsGusture</RepositoryUrl>
-    <PackageReleaseNotes>RELEASE NOTES</PackageReleaseNotes>
-    <PackageIconUrl>ICON URL</PackageIconUrl>
+    <PackageReleaseNotes>
+      1. fix android pan totalmove errors bug.
+      2. android pan's point now with density.
+      3. ios pan now only has running and compalte status.
+    </PackageReleaseNotes>
     <PackageTags>xamarin, windows, ios, android, xamarin.forms, plugin, FormsGesture</PackageTags>
     
     <Title>FormsGesture Plugin for Xamarin</Title>

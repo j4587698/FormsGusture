@@ -38,6 +38,8 @@ namespace TouchTest
             }
         }
 
+        public string TotalMove { get; set; }
+
         public ICommand TapCommand1 => new Command(args =>
         {
             TapCount++;
@@ -52,10 +54,12 @@ namespace TouchTest
                 CurrentPosition = panEvent.CurrentPosition.ToString();
                 StartPosition = panEvent.StartPosition.ToString();
                 Status = panEvent.StatusType.ToString();
+                TotalMove = panEvent.TotalMove.ToString();
                 Debug.WriteLine($"{CurrentPosition} {StartPosition} {Status}");
             }
             OnPropertyChanged(nameof(CurrentPosition));
-            //OnPropertyChanged(nameof(StartPosition));
+            OnPropertyChanged(nameof(StartPosition));
+            OnPropertyChanged(nameof(TotalMove));
             //OnPropertyChanged(nameof(Status));
             Debug.WriteLine($"{nameof(CurrentPosition)} {nameof(StartPosition)} {nameof(Status)}");
             Debug.WriteLine("OnPropertyChanged complate");

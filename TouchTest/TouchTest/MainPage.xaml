@@ -22,6 +22,10 @@
             <Label Text="{Binding StartPosition}"></Label>
         </StackLayout>
         <StackLayout Orientation="Horizontal">
+            <Label Text="Total Move:"></Label>
+            <Label Text="{Binding TotalMove}"></Label>
+        </StackLayout>
+        <StackLayout Orientation="Horizontal">
             <Label Text="Status:"></Label>
             <Label Text="{Binding Status}"></Label>
         </StackLayout>

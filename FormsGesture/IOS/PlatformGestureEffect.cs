@@ -74,7 +74,7 @@ namespace Plugin.FormsGesture.IOS
                     {
                         case UIGestureRecognizerState.Began:
                             eventArgs.StartPosition = pt;
-                            eventArgs.StatusType = GestureStatus.Started;
+                            eventArgs.StatusType = GestureStatus.Running;
                             break;
                         case UIGestureRecognizerState.Changed:
                             eventArgs.StatusType = GestureStatus.Running;
@@ -84,7 +84,7 @@ namespace Plugin.FormsGesture.IOS
 
                             break;
                         case UIGestureRecognizerState.Cancelled:
-                            eventArgs.StatusType = GestureStatus.Canceled;
+                            eventArgs.StatusType = GestureStatus.Completed;
                             break;
                     }
                     eventArgs.CurrentPosition = pt;
