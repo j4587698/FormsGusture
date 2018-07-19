@@ -1,6 +1,7 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Windows.Input;
+using Windows.Graphics.Display;
 using Windows.UI.Input;
 using Windows.UI.Xaml.Input;
 using Plugin.FormsGesture.Shared;
@@ -20,6 +21,8 @@ namespace Plugin.FormsGesture.UAP
         private ICommand tapCommand;
         private ICommand panCommand;
 
+        private float density;
+
         private Gesture.PanEventArgs eventArgs = new Gesture.PanEventArgs();
 
         public PlatformGestureEffect()
@@ -31,14 +34,14 @@ namespace Plugin.FormsGesture.UAP
             };
             detector.Tapped += (sender, args) =>
             {
-                TriggerCommand(tapCommand, new Point(args.Position.X, args.Position.Y));
+                TriggerCommand(tapCommand, GetScaledCoord(args.Position.X, args.Position.Y));
             };
             detector.Dragging += (sender, args) =>
             {
                 switch (args.DraggingState)
                 {
                     case DraggingState.Started:
-                        eventArgs.StartPosition = new Point(args.Position.X, args.Position.Y);
+                        eventArgs.StartPosition = GetScaledCoord(args.Position.X, args.Position.Y);
                         eventArgs.StatusType = GestureStatus.Running;
                         break;
                     case DraggingState.Continuing:
@@ -50,10 +53,21 @@ namespace Plugin.FormsGesture.UAP
                     default:
                         throw new ArgumentOutOfRangeException();
                 }
-                eventArgs.CurrentPosition = new Point(args.Position.X, args.Position.Y);
-                eventArgs.TotalMove = new Point(eventArgs.CurrentPosition.X - eventArgs.StartPosition.X, eventArgs.CurrentPosition.Y - eventArgs.StartPosition.Y);
+                eventArgs.CurrentPosition = GetScaledCoord(args.Position.X, args.Position.Y);
+                eventArgs.TotalMove = GetScaledCoord(eventArgs.CurrentPosition.X - eventArgs.StartPosition.X, eventArgs.CurrentPosition.Y - eventArgs.StartPosition.Y);
                 TriggerCommand(panCommand, eventArgs);
             };
+        }
+
+        private Point GetScaledCoord(double x, double y)
+        {
+            if (Gesture.GetIgnoreDensity(Element))
+            {
+                x = x * density;
+                y = y * density;
+            }
+
+            return new Point(x, y);
         }
 
         private void TriggerCommand(ICommand command, object parameter)
@@ -72,12 +86,20 @@ namespace Plugin.FormsGesture.UAP
         {
             var control = Control ?? Container;
 
+            control.PointerMoved -= ControlOnPointerMoved;
+            control.PointerPressed -= ControlOnPointerPressed;
+            control.PointerReleased -= ControlOnPointerReleased;
+            control.PointerCanceled -= ControlOnPointerCanceled;
+            control.PointerCaptureLost -= ControlOnPointerCanceled;
+
             control.PointerMoved += ControlOnPointerMoved;
             control.PointerPressed += ControlOnPointerPressed;
             control.PointerReleased += ControlOnPointerReleased;
             control.PointerCanceled += ControlOnPointerCanceled;
             control.PointerCaptureLost += ControlOnPointerCanceled;
             //control.PointerExited += ControlOnPointerCanceled;
+
+            density = DisplayInformation.GetForCurrentView().LogicalDpi / 96;
 
             OnElementPropertyChanged(new PropertyChangedEventArgs(String.Empty));
         }

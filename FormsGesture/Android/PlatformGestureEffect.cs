@@ -25,6 +25,7 @@ namespace Plugin.FormsGesture.Android
 
         private DisplayMetrics displayMetrics;
         private Gesture.PanEventArgs eventArgs = new Gesture.PanEventArgs();
+        private bool moving;
 
         public PlatformGestureEffect()
         {
@@ -37,20 +38,21 @@ namespace Plugin.FormsGesture.Android
                     {
                         var x = motionEvent.GetX();
                         var y = motionEvent.GetY();
-                        var point = PxToDp(new Point(x, y));
+                        var point = GetScaledCoord(x, y);
                         if (command.CanExecute(point))
                             command.Execute(point);
                     }
                 },
                 PanAction = (e1, e2, distanceX, distanceY) =>
                 {
+                    moving = true;
                     var command = panCommand;
                     if (command != null)
                     {
-                        eventArgs.StartPosition = PxToDp(new Point(e1.GetX(), e1.GetY()));
-                        eventArgs.CurrentPosition = PxToDp(new Point(e2.GetX(), e2.GetY()));
+                        eventArgs.StartPosition = GetScaledCoord(e1.GetX(), e1.GetY());
+                        eventArgs.CurrentPosition = GetScaledCoord(e2.GetX(), e2.GetY());
                         eventArgs.StatusType = GestureStatus.Running;
-                        eventArgs.TotalMove = PxToDp(new Point(e2.GetX() - e1.GetX(), e2.GetY() - e1.GetY()));
+                        eventArgs.TotalMove = GetScaledCoord(e2.GetX() - e1.GetX(), e2.GetY() - e1.GetY());
                         if (command.CanExecute(eventArgs))
                         {
                             command.Execute(eventArgs);
@@ -59,19 +61,35 @@ namespace Plugin.FormsGesture.Android
                 },
                 PanEndAction = (motionEvent) =>
                 {
+                    if (!moving)
+                    {
+                        return;
+                    }
                     var command = panCommand;
                     if (command != null)
                     {
-                        eventArgs.CurrentPosition = new Point(motionEvent.GetX(), motionEvent.GetY());
+                        eventArgs.CurrentPosition = GetScaledCoord(motionEvent.GetX(), motionEvent.GetY());
                         eventArgs.StatusType = GestureStatus.Completed;
-                        eventArgs.TotalMove = new Point(motionEvent.GetX() - eventArgs.StartPosition.X, motionEvent.GetY() - eventArgs.StartPosition.Y);
+                        eventArgs.TotalMove = GetScaledCoord(motionEvent.GetX() - eventArgs.StartPosition.X, motionEvent.GetY() - eventArgs.StartPosition.Y);
                         if (command.CanExecute(eventArgs))
                         {
                             command.Execute(eventArgs);
                         }
                     }
+
+                    moving = false;
                 }
             };
+        }
+
+        private Point GetScaledCoord(double x, double y)
+        {
+            if (!Gesture.GetIgnoreDensity(Element))
+            {
+                return PxToDp(new Point(x, y));
+            }
+
+            return new Point(x, y);
         }
 
         private Point PxToDp(Point point)
@@ -97,6 +115,7 @@ namespace Plugin.FormsGesture.Android
 
             if (gestureRecognizer == null)
                 gestureRecognizer = new GestureDetectorCompat(context, tapDetector);
+            control.Touch -= ControlOnTouch;
             control.Touch += ControlOnTouch;
 
             OnElementPropertyChanged(new PropertyChangedEventArgs(String.Empty));

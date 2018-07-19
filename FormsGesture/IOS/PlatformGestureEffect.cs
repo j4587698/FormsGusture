@@ -46,7 +46,7 @@ namespace Plugin.FormsGesture.IOS
                 {
                     var control = Control ?? Container;
                     var point = recognizer.LocationInView(control);
-                    var pt = new Point(point.X, point.Y);
+                    var pt = GetScaledCoord(point.X, point.Y);
                     if (handler.CanExecute(pt))
                     {
                         handler.Execute(pt);
@@ -69,7 +69,7 @@ namespace Plugin.FormsGesture.IOS
                 {
                     var control = Control ?? Container;
                     var point = recognizer.LocationInView(control);
-                    var pt = new Point(point.X, point.Y);
+                    var pt = GetScaledCoord(point.X, point.Y);
                     switch (recognizer.State)
                     {
                         case UIGestureRecognizerState.Began:
@@ -88,11 +88,9 @@ namespace Plugin.FormsGesture.IOS
                             break;
                     }
                     eventArgs.CurrentPosition = pt;
-                    eventArgs.TotalMove = new Point(pt.X - eventArgs.StartPosition.X, pt.Y - eventArgs.StartPosition.Y);
-                    Debug.WriteLine($"State:{recognizer.State} GestureStatus:{eventArgs.StatusType}");
+                    eventArgs.TotalMove = GetScaledCoord(pt.X - eventArgs.StartPosition.X, pt.Y - eventArgs.StartPosition.Y);
                     if (handler.CanExecute(eventArgs))
                     {
-                        Debug.WriteLine("handler enter");
                         handler.Execute(eventArgs);
                     }
                 }
@@ -102,6 +100,17 @@ namespace Plugin.FormsGesture.IOS
                 ShouldRecognizeSimultaneously = (recognizer, gestureRecognizer) => true,
                 MaximumNumberOfTouches = 1,
             };
+        }
+
+        private Point GetScaledCoord(double x, double y)
+        {
+            if (Gesture.GetIgnoreDensity(Element))
+            {
+                x = x * UIScreen.MainScreen.Scale;
+                y = y * UIScreen.MainScreen.Scale;
+            }
+
+            return new Point(x, y);
         }
 
 
@@ -115,6 +124,13 @@ namespace Plugin.FormsGesture.IOS
         {
             var control = Control ?? Container;
             control.UserInteractionEnabled = true;
+
+            foreach (var recognizer in recognizers)
+            {
+                recognizer.Enabled = false;
+                control.RemoveGestureRecognizer(recognizer);
+            }
+
             foreach (var recognizer in recognizers)
             {
                 control.AddGestureRecognizer(recognizer);

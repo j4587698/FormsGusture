@@ -13,6 +13,19 @@ namespace Plugin.FormsGesture.Shared
         public static readonly BindableProperty PanCommandProperty = BindableProperty.CreateAttached("PanCommand", typeof(ICommand), typeof(Gesture), null, propertyChanged: CommandChanged);
 
         public static readonly BindableProperty TapCommandProperty = BindableProperty.CreateAttached("TapCommand", typeof(ICommand), typeof(Gesture), null, propertyChanged: CommandChanged);
+
+        public static readonly BindableProperty IgnoreDensityProperty = BindableProperty.CreateAttached("IgnoreDensity", typeof(bool), typeof(Gesture), false);
+
+        public static bool GetIgnoreDensity(BindableObject view)
+        {
+            return (bool)view.GetValue(IgnoreDensityProperty);
+        }
+
+        public static void SetIgnoreDensity(BindableObject view, bool value)
+        {
+            view.SetValue(IgnoreDensityProperty, value);
+        }
+
         public static ICommand GetPanCommand(BindableObject view)
         {
             return (ICommand)view.GetValue(PanCommandProperty);
